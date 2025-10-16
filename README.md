@@ -1,5 +1,10 @@
 # CarbonTrack – AI Carbon Footprint Tracker
 
+Members:
+1.Felix
+2.Mary
+3.Debra
+
 ## Project Overview
 CarbonTrack is a web application that helps users monitor and reduce their carbon footprint. Users can log daily activities (transport, energy, meals) and calculate estimated CO₂ emissions. The app provides AI-generated tips for sustainable actions and visualizes activity trends on a dashboard.
 
