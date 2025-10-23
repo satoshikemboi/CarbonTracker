@@ -1,29 +1,31 @@
-import React, { useState, useEffect } from 'react';
-import Chart from './Chart'; // assuming this component handles visualization
+import React, { useState, useEffect } from "react";
+import Chart from "./Chart";
 
 const ActivityHistory = () => {
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [page, setPage] = useState(1);
 
   useEffect(() => {
     const fetchHistory = async () => {
       setLoading(true);
-      // Simulate API
-      const mockHistory = [
-        { id: 101, date: '2024-05-10', type: 'Transportation', description: 'Car ride', co2Amount: 3.2 },
-        { id: 102, date: '2024-05-09', type: 'Meal', description: 'Beef dinner', co2Amount: 5.6 },
-        { id: 103, date: '2024-05-08', type: 'Meal', description: 'Vegetarian lunch', co2Amount: 1.3 },
-        { id: 104, date: '2024-05-07', type: 'Energy Use', description: 'Home heating (gas)', co2Amount: 4.8 },
-        { id: 105, date: '2024-05-06', type: 'Transportation', description: 'Train commute', co2Amount: 1.9 },
-        { id: 106, date: '2024-05-05', type: 'Energy Use', description: 'Electricity for lighting', co2Amount: 2.7 },
-        { id: 107, date: '2024-05-04', type: 'Meal', description: 'Fish dinner', co2Amount: 2.4 },
-        { id: 108, date: '2024-05-03', type: 'Transportation', description: 'Bus ride', co2Amount: 0.9 },
-        { id: 109, date: '2024-05-02', type: 'Energy Use', description: 'Air conditioning (2 hrs)', co2Amount: 3.5 },
-        { id: 110, date: '2024-05-01', type: 'Meal', description: 'Plant-based meal', co2Amount: 0.8 },
-      ];
-      setHistory(mockHistory);
-      setLoading(false);
+      setError(null);
+
+      try {
+        const response = await fetch("http://localhost:5000/api/activities"); // ✅ Flask endpoint
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch activity data");
+        }
+
+        const data = await response.json();
+        setHistory(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchHistory();
@@ -31,8 +33,16 @@ const ActivityHistory = () => {
 
   if (loading) {
     return (
-      <div style={{ textAlign: 'center', padding: '50px 0', color: '#666' }}>
-        <p>Loading activity history...</p>
+      <div className="text-center py-20 text-gray-600">
+        Loading activity history...
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="text-center py-20 text-red-600 font-semibold">
+        Error: {error}
       </div>
     );
   }
@@ -43,46 +53,34 @@ const ActivityHistory = () => {
   }));
 
   return (
-    <div style={{ maxWidth: '1200px', margin: 'auto', padding: '30px' }}>
-      <h1 style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '20px', color: '#1e293b' }}>
+    <div className="max-w-6xl mx-auto px-4 py-10">
+      <h1 className="text-3xl font-bold mb-6 text-gray-800 text-center">
         Activity History
       </h1>
 
       {history.length === 0 ? (
-        <p style={{ textAlign: 'center', color: '#6b7280' }}>No past activities found.</p>
+        <p className="text-center text-gray-500">No past activities found.</p>
       ) : (
-        <div
-          style={{
-            overflowX: 'auto',
-            boxShadow: '0 4px 10px rgba(0,0,0,0.05)',
-            borderRadius: '10px',
-            background: '#fff',
-            marginBottom: '30px',
-          }}
-        >
-          <table
-            style={{
-              width: '100%',
-              borderCollapse: 'collapse',
-              borderRadius: '10px',
-              overflow: 'hidden',
-            }}
-          >
-            <thead style={{ background: '#1e293b', color: '#fff' }}>
+        <div className="overflow-x-auto bg-white shadow-lg rounded-xl mb-10">
+          <table className="w-full border-collapse rounded-xl overflow-hidden">
+            <thead className="bg-green-700 text-white">
               <tr>
-                <th style={styles.th}>Date</th>
-                <th style={styles.th}>Type</th>
-                <th style={styles.th}>Description</th>
-                <th style={styles.th}>CO₂ Emissions (kg)</th>
+                <th className="text-left py-3 px-4">Date</th>
+                <th className="text-left py-3 px-4">Type</th>
+                <th className="text-left py-3 px-4">Description</th>
+                <th className="text-left py-3 px-4">CO₂ Emissions (kg)</th>
               </tr>
             </thead>
             <tbody>
               {history.map((entry) => (
-                <tr key={entry.id} style={{ borderBottom: '1px solid #e5e7eb' }}>
-                  <td style={styles.td}>{entry.date}</td>
-                  <td style={styles.td}>{entry.type}</td>
-                  <td style={styles.td}>{entry.description}</td>
-                  <td style={{ ...styles.td, fontWeight: 'bold', color: '#2563eb' }}>
+                <tr
+                  key={entry.id}
+                  className="border-b hover:bg-green-50 transition"
+                >
+                  <td className="py-3 px-4">{entry.date}</td>
+                  <td className="py-3 px-4">{entry.type}</td>
+                  <td className="py-3 px-4">{entry.description}</td>
+                  <td className="py-3 px-4 font-semibold text-green-700">
                     {entry.co2Amount}
                   </td>
                 </tr>
@@ -92,36 +90,28 @@ const ActivityHistory = () => {
         </div>
       )}
 
-      <section style={{ marginBottom: '40px' }}>
-        <h2 style={{ fontSize: '1.5rem', marginBottom: '10px', color: '#1e293b' }}>
-          Trends and Summaries
+      {/* Chart Section */}
+      <section className="bg-green-50 rounded-xl p-6 shadow-inner mb-6">
+        <h2 className="text-2xl font-semibold mb-4 text-gray-800">
+          Emission Trends
         </h2>
-        <div
-          style={{
-            background: '#f8fafc',
-            borderRadius: '10px',
-            padding: '20px',
-            boxShadow: 'inset 0 0 10px rgba(0,0,0,0.03)',
-          }}
-        >
-          <Chart data={chartData} />
-        </div>
+        <Chart data={chartData} />
       </section>
 
-      <div style={{ textAlign: 'center', marginTop: '30px' }}>
+      {/* Pagination */}
+      <div className="flex justify-center gap-4 mt-6">
         <button
           onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
           disabled={page === 1}
-          style={{
-            ...styles.button,
-            backgroundColor: page === 1 ? '#9ca3af' : '#2563eb',
-          }}
+          className={`px-5 py-2 rounded-lg font-semibold text-white transition ${
+            page === 1 ? "bg-gray-400" : "bg-green-700 hover:bg-green-800"
+          }`}
         >
           Previous
         </button>
         <button
           onClick={() => setPage((prev) => prev + 1)}
-          style={{ ...styles.button, marginLeft: '15px', backgroundColor: '#2563eb' }}
+          className="px-5 py-2 rounded-lg font-semibold text-white bg-green-700 hover:bg-green-800 transition"
         >
           Next
         </button>
@@ -130,28 +120,5 @@ const ActivityHistory = () => {
   );
 };
 
-// Inline reusable style objects
-const styles = {
-  th: {
-    textAlign: 'left',
-    padding: '12px 15px',
-    fontWeight: '600',
-    fontSize: '0.95rem',
-  },
-  td: {
-    padding: '12px 15px',
-    fontSize: '0.9rem',
-    color: '#334155',
-  },
-  button: {
-    color: '#fff',
-    border: 'none',
-    padding: '10px 20px',
-    borderRadius: '6px',
-    cursor: 'pointer',
-    fontWeight: '600',
-    transition: 'background 0.3s',
-  },
-};
-
 export default ActivityHistory;
+

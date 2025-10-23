@@ -38,7 +38,6 @@ const Navbar = () => {
     { name: "Home", path: "/home" },
     { name: "Log Activity", path: "/activity" },
     { name: "History", path: "/history" },
-    { name: "Profile", path: "/profile" },
   ];
 
   return (

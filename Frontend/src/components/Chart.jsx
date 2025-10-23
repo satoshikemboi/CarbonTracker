@@ -1,4 +1,6 @@
-import React from 'react';
+
+// src/components/Chart.jsx
+import React from "react";
 import {
   ResponsiveContainer,
   LineChart,
@@ -8,11 +10,11 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
-} from 'recharts';
+} from "recharts";
 
-const CO2LineChart = ({ data }) => {
+const Chart = ({ data }) => {
   return (
-    <div style={{ width: '100%', height: 300 }}>
+    <div style={{ width: "100%", height: 300 }}>
       <ResponsiveContainer width="100%" height="100%">
         <LineChart
           data={data}
@@ -27,7 +29,7 @@ const CO2LineChart = ({ data }) => {
             type="monotone"
             dataKey="co2"
             name="CO₂ Emissions (kg)"
-            stroke="#8884d8"
+            stroke="#10B981"
             activeDot={{ r: 8 }}
           />
         </LineChart>
@@ -36,4 +38,6 @@ const CO2LineChart = ({ data }) => {
   );
 };
 
-export default CO2LineChart;
+export default Chart;
+
+

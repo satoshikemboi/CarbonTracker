@@ -53,7 +53,7 @@ const HomePage = () => {
         <div className="flex-1 text-center md:text-left space-y-4 animate-fadeIn">
           <h1 className="text-4xl md:text-5xl font-extrabold text-gray-800">
             Welcome back,{" "}
-            <span className="text-green-600">{user.name}</span> 🌍
+            <span className="text-green-600">{user.name}</span>
           </h1>
           <p className="text-gray-600 text-lg max-w-md mx-auto md:mx-0">
             Track your carbon footprint, log your activities, and see how your
