@@ -11,7 +11,7 @@ const ActivityPage = () => {
   });
   const [editingId, setEditingId] = useState(null);
 
-  const API_URL = "https://trackerbackend-1-486n.onrender.com/api/activities/";
+  const API_URL = "https://trackerbackend-o33n.onrender.com/api/activities/";
 
   // ✅ Fetch all activities from backend
   const fetchActivities = async () => {

@@ -18,7 +18,7 @@ const SignupPage = () => {
     setError('');
   
     try {
-      const response = await fetch('https://trackerbackend-1-486n.onrender.com/api/users/signup', {
+      const response = await fetch('https://trackerbackend-o33n.onrender.com/api/users/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
