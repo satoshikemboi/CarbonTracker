@@ -1,35 +1,50 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+
+import React from 'react';
+import { Routes, Route, useLocation } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import HomePage from './pages/HomePage';
+import ActivityPage from './components/ActivityPage';
+import ActivityHistory from './components/ActivityHistory';
+import AIRecommendations from './components/AIRecommendations';
+import LoginPage from './pages/Auth/LoginPage';
+import SignupPage from './pages/Auth/SignupPage';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const location = useLocation();
+
+  // Hide Navbar on login and signup pages
+  const hideNavbar =
+    location.pathname === '/' || location.pathname === '/signup';
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      {!hideNavbar && <Navbar />}
+
+      <Routes>
+        {/* Show login page by default */}
+        <Route path="/" element={<LoginPage />} />
+
+        {/* Signup page */}
+        <Route path="/signup" element={<SignupPage />} />
+
+        {/* Protected pages */}
+        <Route path="/home" element={<HomePage />} />
+        <Route path="/activity" element={<ActivityPage />} />
+        <Route path="/history" element={<ActivityHistory />} />
+        <Route path="/recommendations" element={<AIRecommendations />} />
+
+        {/* 404 page */}
+        <Route
+          path="*"
+          element={
+            <h2 style={{ textAlign: 'center', marginTop: '50px' }}>
+              404 - Page Not Found
+            </h2>
+          }
+        />
+      </Routes>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
