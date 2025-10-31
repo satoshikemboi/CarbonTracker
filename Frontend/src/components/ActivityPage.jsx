@@ -17,7 +17,7 @@ const ActivityPage = () => {
   const fetchActivities = async () => {
     setLoading(true);
     try {
-      const response = await fetch(API_BASE);
+      const response = await fetch(API_URL);
       if (!response.ok) throw new Error("Failed to fetch activities");
       const data = await response.json();
       setActivities(data);
@@ -60,7 +60,7 @@ const ActivityPage = () => {
         return;
       } else {
         // Create new activity
-        response = await fetch(API_BASE, {
+        response = await fetch(API_URL, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
