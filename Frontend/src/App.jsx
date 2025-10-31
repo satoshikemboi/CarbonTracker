@@ -5,6 +5,7 @@ import Navbar from './components/Navbar';
 import HomePage from './pages/HomePage';
 import ActivityPage from './components/ActivityPage';
 import ActivityHistory from './components/ActivityHistory';
+import AIRecommendations from './components/AIRecommendations';
 import LoginPage from './pages/Auth/LoginPage';
 import SignupPage from './pages/Auth/SignupPage';
 
@@ -30,6 +31,7 @@ function App() {
         <Route path="/home" element={<HomePage />} />
         <Route path="/activity" element={<ActivityPage />} />
         <Route path="/history" element={<ActivityHistory />} />
+        <Route path="/recommendations" element={<AIRecommendations />} />
 
         {/* 404 page */}
         <Route

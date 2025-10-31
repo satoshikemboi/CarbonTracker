@@ -106,18 +106,6 @@ const ActivityPage = () => {
         Log Your Daily Activities
       </h1>
 
-      {/* CO₂ Chart Section */}
-      <div className="bg-white p-6 rounded-2xl shadow-md mb-10">
-        <h2 className="text-xl font-semibold text-gray-700 mb-4">
-          CO₂ Emission Trends
-        </h2>
-        {chartData.length > 0 ? (
-          <Chart data={chartData} />
-        ) : (
-          <p className="text-gray-500">No emission data available yet.</p>
-        )}
-      </div>
-
       {/* Activity Form */}
       <form
         onSubmit={handleSubmit}
@@ -180,6 +168,18 @@ const ActivityPage = () => {
         >
           {editingId ? "Update Activity" : "Add Activity"}
         </button>
+
+        {/* CO₂ Chart Section */}
+      <div className="bg-white p-6 rounded-2xl shadow-md mb-10">
+        <h2 className="text-xl font-semibold text-gray-700 mb-4">
+          CO₂ Emission Trends
+        </h2>
+        {chartData.length > 0 ? (
+          <Chart data={chartData} />
+        ) : (
+          <p className="text-gray-500">No emission data available yet.</p>
+        )}
+      </div>
       </form>
 
       {/* Activity List */}

@@ -1,27 +1,27 @@
 import React, { useState, useEffect } from "react";
-import Chart from "./Chart";
+import Chart from "./Chart"; // adjust path if needed
 
 const ActivityHistory = () => {
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [page, setPage] = useState(1);
 
+  const API_URL = "http://127.0.0.1:5000/api/activities/"; // Flask backend endpoint
+
+  // ✅ Fetch from backend
   useEffect(() => {
     const fetchHistory = async () => {
       setLoading(true);
       setError(null);
 
       try {
-        const response = await fetch("http://localhost:5000/api/activities"); // ✅ Flask endpoint
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch activity data");
-        }
+        const response = await fetch(API_URL);
+        if (!response.ok) throw new Error("Failed to fetch activity history");
 
         const data = await response.json();
         setHistory(data);
       } catch (err) {
+        console.error("Error fetching activities:", err);
         setError(err.message);
       } finally {
         setLoading(false);
@@ -29,28 +29,28 @@ const ActivityHistory = () => {
     };
 
     fetchHistory();
-  }, [page]);
+  }, []);
 
-  if (loading) {
+  // ✅ Prepare chart data
+  const chartData = history.map((entry) => ({
+    period: entry.date || "N/A",
+    co2: parseFloat(entry.co2_amount || entry.co2 || 0),
+  }));
+
+  // ✅ Loading & Error UI
+  if (loading)
     return (
       <div className="text-center py-20 text-gray-600">
         Loading activity history...
       </div>
     );
-  }
 
-  if (error) {
+  if (error)
     return (
       <div className="text-center py-20 text-red-600 font-semibold">
         Error: {error}
       </div>
     );
-  }
-
-  const chartData = history.map((entry) => ({
-    period: entry.date,
-    co2: entry.co2Amount,
-  }));
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-10">
@@ -58,6 +58,7 @@ const ActivityHistory = () => {
         Activity History
       </h1>
 
+      {/* Table Section */}
       {history.length === 0 ? (
         <p className="text-center text-gray-500">No past activities found.</p>
       ) : (
@@ -81,7 +82,7 @@ const ActivityHistory = () => {
                   <td className="py-3 px-4">{entry.type}</td>
                   <td className="py-3 px-4">{entry.description}</td>
                   <td className="py-3 px-4 font-semibold text-green-700">
-                    {entry.co2Amount}
+                    {entry.co2_amount || entry.co2}
                   </td>
                 </tr>
               ))}
@@ -91,34 +92,20 @@ const ActivityHistory = () => {
       )}
 
       {/* Chart Section */}
-      <section className="bg-green-50 rounded-xl p-6 shadow-inner mb-6">
+      <section className="bg-green-50 rounded-xl p-6 shadow-inner">
         <h2 className="text-2xl font-semibold mb-4 text-gray-800">
           Emission Trends
         </h2>
-        <Chart data={chartData} />
+        {chartData.length > 0 ? (
+          <Chart data={chartData} />
+        ) : (
+          <p className="text-gray-500">No emission data to display.</p>
+        )}
       </section>
-
-      {/* Pagination */}
-      <div className="flex justify-center gap-4 mt-6">
-        <button
-          onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-          disabled={page === 1}
-          className={`px-5 py-2 rounded-lg font-semibold text-white transition ${
-            page === 1 ? "bg-gray-400" : "bg-green-700 hover:bg-green-800"
-          }`}
-        >
-          Previous
-        </button>
-        <button
-          onClick={() => setPage((prev) => prev + 1)}
-          className="px-5 py-2 rounded-lg font-semibold text-white bg-green-700 hover:bg-green-800 transition"
-        >
-          Next
-        </button>
-      </div>
     </div>
   );
 };
 
 export default ActivityHistory;
+
 
