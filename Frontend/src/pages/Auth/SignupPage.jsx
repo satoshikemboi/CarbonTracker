@@ -16,17 +16,17 @@ const SignupPage = () => {
     e.preventDefault();
     setLoading(true);
     setError('');
-
+  
     try {
-      const response = await fetch('http://127.0.0.1:5000/api/users/signup', {
+      const response = await fetch('https://trackerbackend-1-486n.onrender.com/api/users/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
       });
-
+  
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || 'Signup failed');
-
+  
       alert('Signup successful! You can now log in.');
       navigate('/login');
     } catch (err) {
@@ -35,7 +35,7 @@ const SignupPage = () => {
       setLoading(false);
     }
   };
-
+  
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 p-6">
       <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md">

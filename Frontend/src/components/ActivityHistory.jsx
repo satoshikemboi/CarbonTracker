@@ -6,7 +6,7 @@ const ActivityHistory = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const API_URL = "http://127.0.0.1:5000/api/activities/"; // Flask backend endpoint
+  const API_URL = "https://trackerbackend-1-486n.onrender.com/api/activities/";
 
   // ✅ Fetch from backend
   useEffect(() => {
