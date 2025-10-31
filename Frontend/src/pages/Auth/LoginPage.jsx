@@ -18,11 +18,12 @@ const LoginPage = () => {
     setError('');
 
     try {
-      const response = await fetch('http://127.0.0.1:5000/api/users/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
-      });
+      const API_URL = "https://trackerbackend-o33n.onrender.com";
+      const response = await fetch(`${API_URL}/api/users/login`, {
+         method: 'POST',
+         headers: { 'Content-Type': 'application/json' },
+         body: JSON.stringify(form),
+    });
 
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || 'Login failed');
